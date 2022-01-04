@@ -13,11 +13,11 @@ def run_program(num_files):
         num_vars = random.randrange(2,5)
 
         porta.create_ieq_file(i, num_vars)
-        os.system(f'bash traf ieq_file_{i}.ieq' )
+        os.system("bash traf ieq_file_%s.ieq" % i)
 
-        feasible_points = porta.get_integer_points(f'ieq_file_{i}.ieq')
+        feasible_points = porta.get_integer_points('ieq_file_%s.ieq' % i)
         porta.create_poi_file(i, num_vars, feasible_points)
-        os.system(f'bash traf poi_file_{i}.poi' )
+        os.system('bash traf poi_file_%s.poi' % i )
 
 if __name__ == "__main__":
 

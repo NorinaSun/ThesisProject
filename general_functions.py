@@ -5,7 +5,7 @@ import numpy as np
 
 def write_row(new_row):
 
-    csv_f = open(f'ieq_file.csv', 'a',newline='')
+    csv_f = open('ieq_file.csv', 'a')
 
     writer = csv.writer(csv_f)
     writer.writerow(new_row)
