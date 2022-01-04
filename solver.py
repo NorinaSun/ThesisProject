@@ -5,8 +5,8 @@ import numpy as np
 import general_functions as gen
 import ip_functions as ip
 import porta_functions as porta
-import gurobi as gp
-from gurobi import GRB
+import gurobipy as gp
+from gurobipy import GRB
 
 
 #defining vars and constants
