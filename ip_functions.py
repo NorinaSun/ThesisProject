@@ -25,9 +25,3 @@ def gen_inequalities(num_vars=2,max_vars=5):
     inequality_list.extend([rhs])
 
     return ('%s <= %s' % (lhs,rhs), inequality_list)
-
-
-def create_objective_function(num_vars):
-    
-
-    
