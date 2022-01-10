@@ -15,7 +15,7 @@ def gen_inequalities(num_vars=2,max_vars=5):
         sum_lhs += rand_integer
         inequality_list.extend([rand_integer])
 
-        lhs +=  '%sx' % i
+        lhs +=  f'{rand_integer}x{i}'
 
         if i != num_vars:
             lhs += ' +'

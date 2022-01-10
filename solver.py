@@ -23,7 +23,6 @@ def gen_var_coefficients(num_vars, max_range=15):
 
     return random.choices(range(max_range),k=num_vars)
 
-
 def concat_var_coef(variable_dict, co_list):
     
     co_vars = []
