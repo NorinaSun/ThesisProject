@@ -43,7 +43,7 @@ def set_objective(model, variable_dict, method = GRB.MAXIMIZE):
 
 
 # adding constraints
-def add_constraint(model, variable_dict, co_list, rhs, inequality):
+def add_constraint(model, variable_dict, co_list, rhs, inequality='less than'):
     
     vars = concat_var_coef(variable_dict, co_list)
 
@@ -54,8 +54,9 @@ def add_constraint(model, variable_dict, co_list, rhs, inequality):
     else:
         raise AttributeError('Inequality passed is not valid. Try "less than" or "greater than"')
         
-
-
+# actually running the model
+def run_solver():
+    
 
 
 # ACTUALLY SOLVER

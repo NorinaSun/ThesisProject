@@ -25,8 +25,9 @@ def create_ieq_file(file_num,num_vars : int, num_inequalities=1):
         num_inequalities -= 1
 
         inequality, inequality_list = ip.gen_inequalities()
-        inequality_list.insert(0,file_num)
-        gen.write_row(inequality_list)
+
+        #inequality_list.insert(0,file_num)
+        #gen.write_row(inequality_list)
 
         ieq_f.write(inequality + "\n" )
 

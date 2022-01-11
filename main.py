@@ -6,7 +6,8 @@ import os
 
 def run_program(num_files):
 
-    gen.write_row(gen.create_title())
+    #commenting out data collection functionality for now
+    #gen.write_row(gen.create_title())
 
     for i in range(1,num_files+1):
 
@@ -18,6 +19,12 @@ def run_program(num_files):
         feasible_points = porta.get_integer_points('ieq_file_%s.ieq' % i)
         porta.create_poi_file(i, num_vars, feasible_points)
         os.system('bash traf poi_file_%s.poi' % i )
+
+        #moving the files to respective folders
+        os.rename(f"ieq_file_{i}.ieq", f"ieq/ieq_file_{i}.ieq")
+        os.rename(f"ieq_file_{i}.ieq.poi", f"ieq_poi/ieq_file_{i}.ieq")
+        os.rename(f"poi_file_{i}.poi", f"poi/poi_file_{i}.poi")
+        os.rename(f"poi_file_{i}.poi.ieq", f"poi_ieq/poi_file_{i}.poi")
 
 if __name__ == "__main__":
 
