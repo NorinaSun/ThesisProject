@@ -19,9 +19,6 @@ def add_decision_vars(model, num_vars):
 
 
 #setting the objective
-def gen_var_coefficients(num_vars, max_range=15):
-
-    return random.choices(range(max_range),k=num_vars)
 
 def concat_var_coef(variable_dict, co_list):
     
@@ -35,7 +32,7 @@ def concat_var_coef(variable_dict, co_list):
 
 def set_objective(model, variable_dict, method = GRB.MAXIMIZE):
     
-    co_list = gen_var_coefficients(len(variable_dict))
+    co_list = ip.gen_objective_function(len(variable_dict))
 
     vars = concat_var_coef(variable_dict, co_list)
     
@@ -55,8 +52,29 @@ def add_constraint(model, variable_dict, co_list, rhs, inequality='less than'):
         raise AttributeError('Inequality passed is not valid. Try "less than" or "greater than"')
         
 # actually running the model
-def run_solver():
+def run_solver(iteration, num_vars, constraints, co_list):
     
+    # create the model
+    m = gp.Model(f"model_{iteration}")
+
+    # adding the decision variables
+    variable_dict = add_decision_vars(m, num_vars)
+
+    # setting the objective
+    set_objective(m, variable_dict)
+
+    #adding the constraints
+    for constraint in constraints:
+        add_constraint(m
+            , variable_dict
+            , constraint["coefficients"]
+            , constraint["rhs"]
+        )
+    
+    m.optimize()
+
+    return m.getObjective()
+
 
 
 # ACTUALLY SOLVER
