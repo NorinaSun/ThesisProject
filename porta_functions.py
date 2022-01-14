@@ -2,7 +2,6 @@ import os
 import random
 import csv
 import numpy as np
-import general_functions as gen
 import ip_functions as ip
 
 
@@ -24,16 +23,13 @@ def init_ieq_file(problem_id, num_vars):
     
     return ieq_f
 
-def add_ieq_inequalities(file, inequality):
+def add_ieq_inequalities(file, num_vars, inequality):
 
-    file.write(inequality + "\n")
+    file.write(f"{inequality}" + "\n")
     
     for i in range(1,num_vars+1):
         file.write('x%s <= 1 \n' % i)
         file.write('x%s >= 0 \n' % i)
-
-    file.write("\nEND \n")
-    file.close()
 
 def end_ieq_file(file, num_vars):
     

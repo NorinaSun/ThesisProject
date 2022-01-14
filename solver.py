@@ -2,7 +2,7 @@ import os
 import random
 import csv
 import numpy as np
-import general_functions as gen
+import data_collection as data
 import ip_functions as ip
 import porta_functions as porta
 import gurobipy as gp
@@ -19,16 +19,25 @@ def add_decision_vars(model, num_vars):
 
 
 #setting the objective
+def concat_var_coef(variables, co_list):
 
-def concat_var_coef(variable_dict, co_list):
-    
-    co_vars = []
+    if type(variables) == list:
+        results = ""
 
-    for coefficient, variable in zip(co_list, variable_dict):
-        elm = coefficient*variable_dict[variable]
-        co_vars.append(elm)
+        for coefficient, variable in zip(co_list, variables):
+            results += f"{coefficient}{variable}"
+            
+            if variable != variables[len(variables)-1]:
+                results += " + "
+        
+    elif type(variables) == dict:
+        results = []
 
-    return co_vars
+        for coefficient, variable in zip(co_list, variables):
+            elm = coefficient*variables[variable]
+            results.append(elm)
+
+    return results
 
 def set_objective(model, variable_dict, method = GRB.MAXIMIZE):
     
