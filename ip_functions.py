@@ -22,7 +22,7 @@ def gen_lessthan_inequality(num_vars=2):
         sum_lhs += rand_integer
         lhs_coef.extend([rand_integer])
     
-    rhs = round(sum_lhs*random.uniform(0.8,1))
+    rhs = round(sum_lhs*random.uniform(0.95,1.5))
 
     return (lhs_coef, rhs)
 

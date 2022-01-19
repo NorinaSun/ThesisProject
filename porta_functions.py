@@ -7,7 +7,7 @@ import ip_functions as ip
 
 def init_ieq_file(problem_id, num_vars):
 
-    ieq_f = open('ieq_file_%s.ieq' % problem_id,"w")
+    ieq_f = open('ieq_%s.ieq' % problem_id,"w")
 
     ieq_f.write("DIM = %s \n \n" % num_vars)
     ieq_f.write("VALID \n")
@@ -26,10 +26,6 @@ def init_ieq_file(problem_id, num_vars):
 def add_ieq_inequalities(file, num_vars, inequality):
 
     file.write(f"{inequality}" + "\n")
-    
-    for i in range(1,num_vars+1):
-        file.write('x%s <= 1 \n' % i)
-        file.write('x%s >= 0 \n' % i)
 
 def end_ieq_file(file, num_vars):
     
@@ -43,7 +39,7 @@ def end_ieq_file(file, num_vars):
 
 def create_poi_file(file_num, num_vars, int_points):
 
-    poi_f = open('poi_file_%s.poi' % file_num,"w+")
+    poi_f = open('poi_%s.poi' % file_num,"w+")
     
     poi_f.write("DIM = %s \n \n" % num_vars)
     poi_f.write("CONV_SECTION \n")
@@ -56,6 +52,48 @@ def create_poi_file(file_num, num_vars, int_points):
 
     poi_f.close()
 
+def get_constraints(filename, num_vars):
+    with open(filename) as f:
+        lines = f.readlines()
+    
+    list_results = []
+
+    for i in lines:
+
+        #take inequality columns only
+        if "(" in i:
+            #extract string values
+            value_str  = i.translate(str.maketrans("","", "()\n"))
+            value_list = list(value_str.split())[1:]
+            #grab var values
+            
+            coefficient_list = []
+
+            for var in range(1,num_vars+1):
+                coefficient = 0
+
+                for val in value_list:
+
+                        if f'x{var}' in val:
+                            coefficient = val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', '')
+                        
+                        break
+                
+                coefficient_list.append(coefficient)
+
+            for val in value_list:
+
+                if '<=' in val:
+                    inequality = '<='
+                elif 'x' not in val and '=' not in val:
+                    rhs = val
+
+            inequality_dict = {'coef': coefficient_list, 'rhs': rhs, 'inequality': inequality}
+
+            list_results.append(inequality_dict)
+
+    return list_results
+    
 def get_integer_points(filename):
 
     with open('%s.poi' % filename) as f:
