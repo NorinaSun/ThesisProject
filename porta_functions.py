@@ -75,7 +75,7 @@ def get_constraints(filename, num_vars):
                 for val in value_list:
 
                         if f'x{var}' in val:
-                            coefficient = val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', '')
+                            coefficient = int(val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', ''))
                         
                         break
                 

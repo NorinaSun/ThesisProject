@@ -9,6 +9,12 @@ import gurobipy as gp
 from gurobipy import GRB
 
 
+#defining the model
+def def_model(problem_id):
+
+    return gp.Model(f"knapsack_{problem_id}")
+
+
 #adding decision vars to model
 def add_decision_vars(model, num_vars):
     variable_dict = {}
