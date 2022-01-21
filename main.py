@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import json
 
-def gen_iteration(problem_id, num_vars, num_inequalities=2):
+def generate_model(problem_id, num_vars, num_inequalities=2):
 
     # initialize the porta file
     porta_file = porta.init_ieq_file(problem_id, num_vars)
@@ -62,19 +62,24 @@ def gen_objective_function_file(num_functions, min_vars, max_vars):
     for num_vars in range(min_vars,max_vars+1):
         for i in range(num_functions):
 
-            obj_coef = ip.gen_objective_functions(num_vars)
+            obj_coef = ip.gen_objective_function(num_vars)
             data_collection.write_row('objective_functions',[objective_function_id,num_vars,obj_coef])
             objective_function_id += 1
 
-#the goal is to compare the generated convex hull by ML
-def do_stuff():
-
+def load_csv_df():
     #load all the csv's as dataframes
 
     original_constraints = pd.read_csv("data/original_constraints.csv")
     porta_convex_hull = pd.read_csv("data/convex_hull_porta.csv")
     ml_convex_hull = pd.read_csv("data/convex_hull_ml.csv")
     objective_functions = pd.read_csv("data/objective_functions.csv")
+    convex_hull_results : pd.read_csv("data/results_convex_hull.csv")
+    ml_enriched_constraints_results : pd.read_csv("data/results_ml_enriched_constraints.csv")
+
+
+#the goal is to compare the generated convex hull by ML
+def do_stuff():
+
 
     #the goal is to compare the generated convex hull by ML
 
@@ -110,22 +115,42 @@ def get_lhs_coef(tbl, problem_id):
     
     return results
 
-
-
-
-        
-
-
-def run_program(num_files):
-
-
-    #init
-    data_collection.set_column_names()
+def get_objective_functions(tbl,num_vars):
     
+    results = {}
+
+    relevant_tbl= tbl[tbl['num_vars'] == num_vars]
+
+    for row_index in relevant_tbl.index:
+        row = relevant_tbl.iloc[row_index]
+        results[row['objective_function_id']] = json.loads(row['objective_function_coefficients'])
+        
+    return results
+
+
+def run_program(min_vars, max_vars, num_models, num_obj_func):
+
+
+    #init the data files
+    data_collection.set_column_names()
+
+    #load all the data files as csv
+    load_csv_df()
+
+    #create the objective functions
+    gen_objective_function_file(num_obj_func, min_vars, max_vars)
+
+    #
     
 
 if __name__ == "__main__":
 
-    run_program(1)
+    min_vars = input("Enter the minimum number of variables you want in your models:  ")
 
-    #json.loads(x) for string back to list
+    max_vars = input("Enter the maximum number of variables you want in your models:  ")
+
+    num_models = input("Enter the number of models you would like to generate per variable number:  ")
+
+    num_obj_func = input("Enter the number of objective functions you would like to test each model with:  ")
+
+    run_program(min_vars, max_vars, num_models, num_obj_func)
