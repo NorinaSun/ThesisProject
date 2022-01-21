@@ -84,26 +84,35 @@ def do_stuff():
 
     problem_array = porta_convex_hull['problem_id'].unique()
 
-    for problem_id in problem_array():
+    for problem_id in problem_array:
 
-        # get the number of vars
-        lhs_string = porta_convex_hull[porta_convex_hull['problem_id'] == problem_id]['lhs'][0]
-        lhs_list = json.loads(lhs_string)
-
-        # get the number of constraints for this problem id
-        num_constraints = len(porta_convex_hull[porta_convex_hull['problem_id'] == problem_id]['inequality_id'])
-
-        # get the actual constraints 
-        constraints = porta_convex_hull.loc[(porta_convex_hull['problem_id'] == problem_id)]
-            
-    json.loads(porta_convex_hull.loc[(porta_convex_hull['problem_id'] == 1234)]['lhs']).tolist()
+        results = get_lhs_coef(porta_convex_hull,problem_id)
+        print(f'{problem_id} : {results}')
 
 
-        # objective_function_coefs = objective_functions[objective_functions['num_vars'] == num_vars]
+def get_lhs_coef(tbl, problem_id):
+    # get the number of vars
+    lhs_string = tbl[tbl['problem_id'] == problem_id]['lhs'][0]
+    lhs_list = json.loads(lhs_string)
 
-        # for objective_function in 
+    # get the inequality ids for the problem
+    constraint_ids_list = tbl[tbl['problem_id'] == problem_id]['inequality_id'].unique()
 
-        # solver.run_solver(problem_id, )
+    # get the constraints for the problem_id
+    constraints = tbl.loc[(tbl['problem_id'] == problem_id)]
+
+    #defining the final list of lists
+    results = []
+
+    for constraint_index in constraints.index:
+        lhs_coef = json.loads(constraints.iloc[constraint_index]['lhs'])
+        results.append(lhs_coef)
+    
+    return results
+
+
+
+
         
 
 
