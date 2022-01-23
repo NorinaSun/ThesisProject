@@ -140,17 +140,25 @@ def run_program(min_vars, max_vars, num_models, num_obj_func):
     #create the objective functions
     gen_objective_function_file(num_obj_func, min_vars, max_vars)
 
-    #
+    #generate the models
+    for num_vars in range(min_vars, max_vars+1):
+        for model in range(num_models):
+            generate_model(f'{str(num_vars)}-{str(model)}', num_vars, num_inequalities=2)
     
 
 if __name__ == "__main__":
 
-    min_vars = input("Enter the minimum number of variables you want in your models:  ")
+    min_vars = int(input("Enter the minimum number of variables you want in your models:  "))
 
-    max_vars = input("Enter the maximum number of variables you want in your models:  ")
+    max_vars = int(input("Enter the maximum number of variables you want in your models:  "))
 
-    num_models = input("Enter the number of models you would like to generate per variable number:  ")
+    num_models = int(input("Enter the number of models you would like to generate per variable number:  "))
 
-    num_obj_func = input("Enter the number of objective functions you would like to test each model with:  ")
+    num_obj_func = int(input("Enter the number of objective functions you would like to test each model with:  "))
+
+    print(type(min_vars))
+    print(max_vars)
+    print(num_models)
+    print(num_obj_func)
 
     run_program(min_vars, max_vars, num_models, num_obj_func)

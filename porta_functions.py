@@ -3,6 +3,7 @@ import random
 import csv
 import numpy as np
 import ip_functions as ip
+import re
 
 
 def init_ieq_file(problem_id, num_vars):
@@ -65,18 +66,34 @@ def get_constraints(filename, num_vars):
             #extract string values
             value_str  = i.translate(str.maketrans("","", "()\n"))
             value_list = list(value_str.split())[1:]
-            #grab var values
             
+            print(f'initial value list: {value_list}')
+            #check if vars were sticky
+            for val in value_list:
+                if val.count("x") > 1:
+
+                    split_list = re.split(r'([+-])',val)
+                    split_list.remove('')
+
+                    i = 0
+                    while i <= val.count("x"): #2
+                        split_var = split_list[i] + split_list[i+1]
+                        value_list.insert(int(i/2),split_var)
+                        i += 2
+
+                    value_list.remove(val)
+            print(f'end value list: {value_list}')
+
+            #extract the coefficients
+            rhs_list = [ x for x in value_list if "x" in x ]
             coefficient_list = []
 
             for var in range(1,num_vars+1):
                 coefficient = 0
 
-                for val in value_list:
-
-                        if f'x{var}' in val:
-                            coefficient = int(val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', ''))
-                        
+                for val in rhs_list:
+                    if f'x{var}' in val:
+                        coefficient = int(float(val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', '')))
                         break
                 
                 coefficient_list.append(coefficient)
