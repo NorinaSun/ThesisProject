@@ -127,6 +127,21 @@ def get_objective_functions(tbl,num_vars):
         
     return results
 
+def gen_results():
+
+    # 1. grab the problem ids
+    # 2. loop through the problem ids
+    # 3. grab the respective constraints for each problem id
+    # 4. grab the applicable objective functions for the problem ( can be done earlier )
+    # 5. loop through the objective functions and run with with each constraint set
+    # 6. write results to file
+
+
+    get_objective_functions()
+
+
+
+    solver.run_solver(iteration, num_vars, constraints, co_list)
 
 def run_program(min_vars, max_vars, num_models, num_obj_func):
 
@@ -144,6 +159,10 @@ def run_program(min_vars, max_vars, num_models, num_obj_func):
     for num_vars in range(min_vars, max_vars+1):
         for model in range(num_models):
             generate_model(f'{str(num_vars)}-{str(model)}', num_vars, num_inequalities=2)
+
+    #run the solver
+    gen_results()
+
     
 
 if __name__ == "__main__":

@@ -67,7 +67,6 @@ def get_constraints(filename, num_vars):
             value_str  = i.translate(str.maketrans("","", "()\n"))
             value_list = list(value_str.split())[1:]
             
-            print(f'initial value list: {value_list}')
             #check if vars were sticky
             for val in value_list:
                 if val.count("x") > 1:

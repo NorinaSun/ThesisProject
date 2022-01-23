@@ -45,11 +45,9 @@ def concat_var_coef(variables, co_list):
 
     return results
 
-def set_objective(model, variable_dict, method = GRB.MAXIMIZE):
-    
-    co_list = ip.gen_objective_function(len(variable_dict))
+def set_objective(model, variable_dict, obj_func_coefs, method = GRB.MAXIMIZE):
 
-    vars = concat_var_coef(variable_dict, co_list)
+    vars = concat_var_coef(variable_dict, obj_func_coefs)
     
     model.setObjective(gp.quicksum(vars), method)
 
@@ -67,7 +65,7 @@ def add_constraint(model, variable_dict, co_list, rhs, inequality='less than'):
         raise AttributeError('Inequality passed is not valid. Try "less than" or "greater than"')
         
 # actually running the model
-def run_solver(iteration, num_vars, constraints, co_list):
+def run_solver(iteration, num_vars, constraints, obj_func_coefs):
     
     # create the model
     m = gp.Model(f"model_{iteration}")
@@ -76,7 +74,7 @@ def run_solver(iteration, num_vars, constraints, co_list):
     variable_dict = add_decision_vars(m, num_vars)
 
     # setting the objective
-    set_objective(m, variable_dict)
+    set_objective(m, variable_dict, obj_func_coefs)
 
     #adding the constraints
     for constraint in constraints:
@@ -92,27 +90,27 @@ def run_solver(iteration, num_vars, constraints, co_list):
 
 
 
-# ACTUALLY SOLVER
+# # ACTUALLY SOLVER
 
-#defining the model
-m = gp.Model("knapsack")
+# #defining the model
+# m = gp.Model("knapsack")
 
-# adding the decision variables
-variable_dict = add_decision_vars(m,3)
+# # adding the decision variables
+# variable_dict = add_decision_vars(m,3)
 
-# setting the objective
-set_objective(m, variable_dict)
+# # setting the objective
+# set_objective(m, variable_dict)
 
-# adding constraints
-add_constraint(m, variable_dict, [1,3,1],5,'less than')
-add_constraint(m, variable_dict, [2,6,3],14,'less than')
+# # adding constraints
+# add_constraint(m, variable_dict, [1,3,1],5,'less than')
+# add_constraint(m, variable_dict, [2,6,3],14,'less than')
 
-#optimize
-m.optimize()
+# #optimize
+# m.optimize()
 
-for v in m.getVars():
-    print('%s %g' % (v.VarName, v.X))
+# for v in m.getVars():
+#     print('%s %g' % (v.VarName, v.X))
 
-print('Obj: %g' % m.ObjVal)
+# print('Obj: %g' % m.ObjVal)
 
-print(m.getObjective())
+# print(m.getObjective())
