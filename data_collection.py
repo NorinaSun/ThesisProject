@@ -67,9 +67,3 @@ def set_column_names():
     write_row('convex_hull_results',["id","problem_id", "objective_function_id","ml_solver","porta_solver"])
 
     write_row('ml_enriched_constraints_results',["id","problem_id", "objective_function_id","original_solver","ml_solver", "original_runtime","ml_runtime"])
-
-# def create_constraint_row(id,lhs, rhs, inequality = '<='):
-
-
-
-#     write_row('constraint_tbl', [id, lhs, rhs, inequality] )

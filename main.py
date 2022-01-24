@@ -66,24 +66,6 @@ def gen_objective_function_file(num_functions, min_vars, max_vars):
             data.write_row('objective_functions',[objective_function_id,num_vars,obj_coef])
             objective_function_id += 1
 
-#the goal is to compare the generated convex hull by ML
-# def do_stuff():
-
-
-#     #the goal is to compare the generated convex hull by ML
-
-#     # try:
-#     #     np.array_equal(porta_convex_hull['problem_id'].unique(),ml_convex_hull['problem_id'].unique()):
-#     # except False as error:
-
-#     problem_array = porta_convex_hull['problem_id'].unique()
-
-#     for problem_id in problem_array:
-
-#         results = get_lhs_coef(porta_convex_hull,problem_id)
-#         print(f'{problem_id} : {results}')
-
-
 def get_objective_functions(num_vars):
 
     objective_functions = data.get_tbl('objective_functions', 'dataframe')
@@ -111,26 +93,6 @@ def get_df_constraints(df):
         )
     
     return constraints_list
-
-# def get_lhs_coef(tbl, problem_id):
-#     # get the number of vars
-#     lhs_string = tbl[tbl['problem_id'] == problem_id]['lhs'][0]
-#     lhs_list = json.loads(lhs_string)
-
-#     # get the inequality ids for the problem
-#     constraint_ids_list = tbl[tbl['problem_id'] == problem_id]['inequality_id'].unique()
-
-#     # get the constraints for the problem_id
-#     constraints = tbl.loc[(tbl['problem_id'] == problem_id)]
-
-#     #defining the final list of lists
-#     results = []
-
-#     for constraint_index in constraints.index:
-#         lhs_coef = json.loads(constraints.iloc[constraint_index]['lhs'])
-#         results.append(lhs_coef)
-    
-#     return results
 
 def get_num_vars(df):
 
@@ -223,10 +185,5 @@ if __name__ == "__main__":
     num_models = int(input("Enter the number of models you would like to generate per variable number:  "))
 
     num_obj_func = int(input("Enter the number of objective functions you would like to test each model with:  "))
-
-    print(type(min_vars))
-    print(max_vars)
-    print(num_models)
-    print(num_obj_func)
 
     run_program(min_vars, max_vars, num_models, num_obj_func)

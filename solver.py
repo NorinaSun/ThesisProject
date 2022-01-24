@@ -92,30 +92,3 @@ def run_solver(iteration, num_vars, constraints, obj_func_coefs):
     run_time = time.time() - start_time
 
     return m.ObjVal, run_time
-
-
-
-# # ACTUALLY SOLVER
-
-# #defining the model
-# m = gp.Model("knapsack")
-
-# # adding the decision variables
-# variable_dict = add_decision_vars(m,3)
-
-# # setting the objective
-# set_objective(m, variable_dict)
-
-# # adding constraints
-# add_constraint(m, variable_dict, [1,3,1],5,'less than')
-# add_constraint(m, variable_dict, [2,6,3],14,'less than')
-
-# #optimize
-# m.optimize()
-
-# for v in m.getVars():
-#     print('%s %g' % (v.VarName, v.X))
-
-# print('Obj: %g' % m.ObjVal)
-
-# print(m.getObjective())

@@ -34,14 +34,3 @@ def gen_objective_function(num_vars, max_val = 15):
     """
 
     return random.choices(range(max_val),k=num_vars)
-
-    # commenting out the padding of the inequality for now
-    #inequality_list.extend([0]*(max_vars-num_vars))  
-    #inequality_list.extend([rhs])
-
-
-
-        
-
-
-
