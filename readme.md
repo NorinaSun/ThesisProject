@@ -18,3 +18,6 @@ Setup Instructions
   PATH=/bin:/usr/bin:/usr/local/bin:/Users/...porta-1.4.1/gnu-make/bin:/ThesisProject${PATH}
   ```
  
+ Run Instructions
+ 
+- Execute main.py. Answer the prompts in console.
