@@ -5,8 +5,10 @@ import numpy as np
 import data_collection as data
 import ip_functions as ip
 import porta_functions as porta
+import time
 import gurobipy as gp
 from gurobipy import GRB
+
 
 
 #defining the model
@@ -53,13 +55,13 @@ def set_objective(model, variable_dict, obj_func_coefs, method = GRB.MAXIMIZE):
 
 
 # adding constraints
-def add_constraint(model, variable_dict, co_list, rhs, inequality='less than'):
+def add_constraint(model, variable_dict, co_list, rhs, inequality='<='):
     
     vars = concat_var_coef(variable_dict, co_list)
 
-    if inequality == 'less than':
+    if inequality == '<=':
         model.addConstr(gp.quicksum(vars) <= rhs)
-    elif inequality == 'greater than':
+    elif inequality == '>=':
         model.addConstr(gp.quicksum(vars) >= rhs)
     else:
         raise AttributeError('Inequality passed is not valid. Try "less than" or "greater than"')
@@ -80,13 +82,16 @@ def run_solver(iteration, num_vars, constraints, obj_func_coefs):
     for constraint in constraints:
         add_constraint(m
             , variable_dict
-            , constraint["coefficients"]
+            , constraint["lhs"]
             , constraint["rhs"]
+            , constraint['inequality']
         )
-    
-    m.optimize()
 
-    return m.getObjective()
+    start_time = time.time()
+    m.optimize()
+    run_time = time.time() - start_time
+
+    return m.ObjVal, run_time
 
 
 

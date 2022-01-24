@@ -1,6 +1,35 @@
 import os
 import random
 import csv
+import pandas as pd
+
+
+def init_tables():
+
+    if os.path.getsize(get_tbl('original_constraints','path')) == 0:
+        set_column_names()
+
+
+def get_tbl(tbl_name, format):
+
+    data_mapping = {
+        'original_constraints': 'data/original_constraints.csv',
+        'porta_convex_hull': 'data/convex_hull_porta.csv',
+        'ml_convex_hull': 'data/convex_hull_ml.csv',
+        'objective_functions': 'data/objective_functions.csv',
+        'convex_hull_results' : 'data/results_convex_hull.csv',
+        'ml_enriched_constraints_results' : 'data/results_ml_enriched_constraints.csv'
+    }
+
+    if format == 'text':
+        return open(data_mapping[tbl_name],'a')
+    elif format == 'dataframe':
+        return pd.read_csv(data_mapping[tbl_name])
+    elif format == 'path':
+        return data_mapping[tbl_name]
+    else:
+        raise ValueError("format not known, please use either 'text', 'dataframe', or 'path'")
+
 
 def write_row(table, new_row):
     '''
@@ -15,19 +44,11 @@ def write_row(table, new_row):
         - ml_enriched_constraints_results
     '''
 
-    data_table = {
-        'original_constraints': open('data/original_constraints.csv', 'a'),
-        'porta_convex_hull': open('data/convex_hull_porta.csv', 'a'),
-        'ml_convex_hull': open('data/convex_hull_ml.csv', 'a'),
-        'objective_functions': open('data/objective_functions.csv', 'a'),
-        'convex_hull_results' : open('data/results_convex_hull.csv','a'),
-        'ml_enriched_constraints_results' : open('data/results_ml_enriched_constraints.csv','a')
-    }
-    
-    writer = csv.writer(data_table[table])
+    file = get_tbl(table,'text')
+    writer = csv.writer(file)
     writer.writerow(new_row)
 
-    data_table[table].close()
+    file.close()
 
 def set_column_names():
     '''

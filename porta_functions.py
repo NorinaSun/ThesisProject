@@ -53,7 +53,7 @@ def create_poi_file(file_num, num_vars, int_points):
 
     poi_f.close()
 
-def get_constraints(filename, num_vars):
+def get_porta_constraints(filename, num_vars):
     with open(filename) as f:
         lines = f.readlines()
     
@@ -81,7 +81,6 @@ def get_constraints(filename, num_vars):
                         i += 2
 
                     value_list.remove(val)
-            print(f'end value list: {value_list}')
 
             #extract the coefficients
             rhs_list = [ x for x in value_list if "x" in x ]
