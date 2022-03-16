@@ -6,9 +6,16 @@ import pandas as pd
 
 def init_tables():
 
-    if os.path.getsize(get_tbl('original_constraints','path')) == 0:
-        set_column_names()
-
+    original_constraints = get_tbl('original_constraints','path')
+    if os.path.isfile(original_constraints) & os.path.getsize(original_constraints) != 0:
+        empty_tables()
+  
+    set_column_names()
+    
+def empty_tables():
+    dir = 'data/'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
 
 def get_tbl(tbl_name, format):
 
