@@ -17,6 +17,8 @@ Setup Instructions
   or if downloading this repo in gnu-make/bin 
   PATH=/bin:/usr/bin:/usr/local/bin:/Users/...porta-1.4.1/gnu-make/bin:/ThesisProject${PATH}
   ```
+- install gurobi and have a valid [gurobi license](https://www.gurobi.com/academia/academic-program-and-licenses)
+
  
  Run Instructions
  
