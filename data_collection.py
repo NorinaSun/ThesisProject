@@ -6,16 +6,18 @@ import pandas as pd
 
 def init_tables():
 
-    original_constraints = get_tbl('original_constraints','path')
-    if os.path.isfile(original_constraints) & os.path.getsize(original_constraints) != 0:
-        empty_tables()
-  
+    # original_constraints = get_tbl('original_constraints','path')
+    # if os.path.isfile(original_constraints) & os.path.getsize(original_constraints) != 0:
+    #     empty_tables()
+
+    empty_directories()
     set_column_names()
-    
-def empty_tables():
-    dir = 'data/'
-    for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
+
+def empty_directories():
+
+    for dir in ['data/','ieq/','ieq_poi/','poi/','poi_ieq/']:
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
 
 def get_tbl(tbl_name, format):
 
