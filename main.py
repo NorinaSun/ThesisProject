@@ -174,7 +174,6 @@ def run_program(min_vars, max_vars, num_models, num_obj_func):
     #run the solver
     gen_results()
 
-    
 
 if __name__ == "__main__":
 

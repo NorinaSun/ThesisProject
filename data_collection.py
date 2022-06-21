@@ -5,11 +5,7 @@ import pandas as pd
 
 
 def init_tables():
-
-    # original_constraints = get_tbl('original_constraints','path')
-    # if os.path.isfile(original_constraints) & os.path.getsize(original_constraints) != 0:
-    #     empty_tables()
-
+    
     empty_directories()
     set_column_names()
 
