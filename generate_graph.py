@@ -1,9 +1,7 @@
-from xml.dom.minicompat import NodeList
 import numpy as np
 import itertools
 import random
-
-
+import data_collection as data
 
 class Mip:
     mip_id = itertools.count().next
@@ -11,9 +9,10 @@ class Mip:
     def __init__(self, num_vars, num_ieq):
         self.id = Mip.mip_id()
         self.num_vars = num_vars
-        self.num_ieq = num_ieq
-
-    def set
+        self.num_ieq = num_ieq 
+        
+        self.gen_objective_functions()
+        self.gen_inequalities()
 
     def gen_lessthan_inequality(self):
         """
@@ -34,16 +33,6 @@ class Mip:
 
         return (lhs_coef, rhs)
 
-    def gen_objective_functions(self, max_val = 15):
-        """
-        Generates a list of values the length of the given number of variables
-
-        Optional parameter to specify the max value of 
-        """
-        
-
-        return random.choices(range(max_val),k=self.num_vars)
-    
     def gen_inequalities(self):
 
         inequalities = []
@@ -58,133 +47,39 @@ class Mip:
 
         self.inequalities = inequalities
 
-class PortaMip(Mip):
+    def gen_objective_functions(self, num_obj_functions=10, max_val = 15):
+        """
+        Generates a list of values the length of the given number of variables
 
-    def __init__(self):
-        self.filename
-        self.file
-        self.file_num
-
-    def init_ieq_file(self):
-
-        ieq_f = open('ieq_%s.ieq' % self.id,"w")
-
-        ieq_f.write("DIM = %s \n \n" % self.num_vars)
-        ieq_f.write("VALID \n")
-        valid = self.num_vars*'0 '
-        ieq_f.write("%s \n \n" % valid)
-        ieq_f.write("LOWER_BOUNDS \n")
-        lower_bound = self.num_vars*'0 '
-        ieq_f.write("%s \n \n" % lower_bound)
-        ieq_f.write("UPPER_BOUNDS \n")
-        upper_bound = self.num_vars*'1 '
-        ieq_f.write("%s \n \n" % upper_bound)
-        ieq_f.write("INEQUALITIES_SECTION \n")
+        Optional parameter to specify the max value of 
+        """
+        obj_functions = []
+        for i in range(num_obj_functions):
+            obj_functions.append(random.choices(range(max_val),k=self.num_vars))
         
-        return ieq_f
+        self.obj_functions = obj_functions
     
-    def add_ieq_inequalities(self,file,inequality):
-
-        file.write(f"{inequality}" + "\n")
-    
-    def end_ieq_file(self, file):
-    
-        for i in range(1,self.num_vars+1):
-            file.write('x%s <= 1 \n' % i)
-            file.write('x%s >= 0 \n' % i)
-
-        file.write("\nEND \n")
-        file.close()
-
-    def create_poi_file(self, file_num, int_points):
-
-        poi_f = open('poi_%s.poi' % file_num,"w+")
+    def write_mip(self):
         
-        poi_f.write("DIM = %s \n \n" % self.num_vars)
-        poi_f.write("CONV_SECTION \n")
-        
-        for point in int_points:
-            print(*point, sep =' ', file = poi_f)
+        original_constraints = data.get_tbl('original_constraints','csv')
+        objective_functions = data.get_tbl('objective_functions','csv')
 
-        poi_f.write("\nEND \n")
-        poi_f.write("DIMENSION OF THE POLYHEDRON : %s \n \n" % self.num_vars )
-
-        poi_f.close()
-    
-    def get_porta_constraints(self, filename):
-        with open(filename) as f:
-            lines = f.readlines()
-        
-        list_results = []
-
-        for i in lines:
-
-            #take inequality columns only
-            if "(" in i:
-                #extract string values
-                value_str  = i.translate(str.maketrans("","", "()\n"))
-                value_list = list(value_str.split())[1:]
-                
-                #check if vars were sticky
-                for val in value_list:
-                    if val.count("x") > 1:
-
-                        split_list = re.split(r'([+-])',val)
-                        split_list.remove('')
-
-                        i = 0
-                        while i <= val.count("x"): #2
-                            split_var = split_list[i] + split_list[i+1]
-                            value_list.insert(int(i/2),split_var)
-                            i += 2
-
-                        value_list.remove(val)
-
-                #extract the coefficients
-                rhs_list = [ x for x in value_list if "x" in x ]
-                coefficient_list = []
-
-                for var in range(1,self.num_vars+1):
-                    coefficient = 0
-
-                    for val in rhs_list:
-                        if f'x{var}' in val:
-                            coefficient = int(float(val.replace(f'-x{var}', '-1').replace(f'+x{var}', '1').replace(f'x{var}', '')))
-                            break
-                    
-                    coefficient_list.append(coefficient)
-
-                for val in value_list:
-
-                    if '<=' in val:
-                        inequality = '<='
-                    elif 'x' not in val and '=' not in val:
-                        rhs = val
-
-                inequality_dict = {'coef': coefficient_list, 'rhs': rhs, 'inequality': inequality}
-
-                list_results.append(inequality_dict)
-
-        return list_results
-    
-    def get_integer_points(self, filename):
-
-        with open('%s.poi' % filename) as f:
-            lines = f.readlines()
-
-        list_results = []
-
-        for i in lines:
-
-            if "(" in i and "/" not in i:
-
-                value_str  = i.translate(str.maketrans("","", "()\n"))
-                value_list = list(value_str.split())
-                list_results.append(value_list[1:])
-
-        return list_results
+        for ieq in self.inequalities:
             
 
+    #     if __name__ == '__main__':
+    # filename = 'items.csv'
+    # items = [Items(100, 'iPhone 10', 'Mobiles'), Items(200, 'Lenovo', 'Laptops')
+    #     , Items(300, 'Java in Action', 'Books'), Items(400, 'Python', 'Books')]
+    # try:
+    #     with open(filename, 'w', newline='') as f:
+    #         writer = csv.writer(f)
+    #         for item in items:
+    #             writer.writerow([item.id, item.name, item.category])
+    # except BaseException as e:
+    #     print('BaseException:', filename)
+    # else:
+    #     print('Data has been loaded successfully !')
 
 class Graph(Mip):
     """
