@@ -1,4 +1,3 @@
-import numpy as np
 import itertools
 import random
 import data_collection as data
@@ -10,6 +9,8 @@ class Mip:
         self.id = Mip.mip_id()
         self.num_vars = num_vars
         self.num_ieq = num_ieq 
+        self.inequalities = []
+        self.obj_functions = []
         
         self.gen_objective_functions()
         self.gen_inequalities()
@@ -34,17 +35,13 @@ class Mip:
         return (lhs_coef, rhs)
 
     def gen_inequalities(self):
-
-        inequalities = []
         
         for ieq in range(self.num_ieq):
             inequality = {}
             lhs_coef, rhs = self.gen_lessthan_inequality()
             inequality['lhs_coef'] = lhs_coef
             inequality['rhs'] = rhs
-            inequalities.append(inequality)
-
-        self.inequalities = inequalities
+            self.inequalities.append(inequality)
 
     def gen_objective_functions(self, num_obj_functions=10, max_val = 15):
         """
@@ -52,11 +49,9 @@ class Mip:
 
         Optional parameter to specify the max value of 
         """
-        obj_functions = []
         for i in range(num_obj_functions):
-            obj_functions.append(random.choices(range(max_val),k=self.num_vars))
-        
-        self.obj_functions = obj_functions
+            self.obj_functions.append(random.choices(range(max_val),k=self.num_vars))
+    
     
     def write_mip(self):
 
