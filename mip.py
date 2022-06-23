@@ -1,6 +1,7 @@
 import itertools
 import random
 import data_collection as data
+import logging
 
 class Mip:
     mip_id = itertools.count().__next__
@@ -42,6 +43,8 @@ class Mip:
             inequality['lhs_coef'] = lhs_coef
             inequality['rhs'] = rhs
             self.inequalities.append(inequality)
+        
+        return self.inequalities
 
     def gen_objective_functions(self, num_obj_functions=10, max_val = 15):
         """
@@ -51,13 +54,21 @@ class Mip:
         """
         for i in range(num_obj_functions):
             self.obj_functions.append(random.choices(range(max_val),k=self.num_vars))
+        
+        return self.obj_functions
     
     
     def write_mip(self):
 
         for idx, ieq in enumerate(self.inequalities):
-            data.write_row('original_constraints', [self.id, idx, ieq['lhs_coef'], ieq['rhs'],"<="])
+            try:
+                data.write_row('original_constraints', [self.id, idx, ieq['lhs_coef'], ieq['rhs'],"<="])
+            except Exception as e:
+                logging.error("Unable to write MIP to original_constraints file")
         
         for idx, obj in enumerate(self.obj_functions):
-            data.write_row('objective_functions', [idx, self.num_vars, obj])
+            try:
+                data.write_row('objective_functions', [idx, self.num_vars, obj])
+            except Exception as e:
+                logging.error("Unable to write MIP to objective_functions file")
 
