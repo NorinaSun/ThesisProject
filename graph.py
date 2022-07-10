@@ -48,8 +48,7 @@ class Graph(mip.Mip):
         self.adj_matrix.append([0]*self.num_vars + [ieq['rhs'] for ieq in self.inequalities] + [0])
 
         #replace A_ii with 1
-        self.adj_tensor = torch.tensor(self.adj_matrix)
-
+        self.adj_tensor = torch.tensor(self.adj_matrix).fill_diagonal_(1)
         
     def generate_feature_matrix(self):
         np.zeros((self.num_nodes,self.d))

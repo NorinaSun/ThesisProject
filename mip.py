@@ -6,7 +6,7 @@ import logging
 class Mip:
     mip_id = itertools.count().__next__
 
-    def __init__(self, num_vars, num_ieq):
+    def __init__(self, num_vars, num_ieq=2):
         self.id = Mip.mip_id()
         self.num_vars = num_vars
         self.num_ieq = num_ieq 
@@ -15,6 +15,7 @@ class Mip:
         
         self.gen_objective_functions()
         self.gen_inequalities()
+        self.write_mip()
 
     def gen_lessthan_inequality(self):
         """
